@@ -25,7 +25,9 @@
     "nodemon": "^2.0.22",
     "jest": "^29.5.0"
   },
-  "keywords": ["estafas", "colombia", "seguridad", "reportes"],
-  "author": "Gobierno de Colombia",
+  "keywords": ["estafas", "colombia", "seguridad", "reportes", "extorsiones", "fraudes", 
+                "llamadas", "dinero", "pagos", "delicuencia", "amenasas", "ataques", "tecnología"],
+  "author": "MarioAcostaDevSATI - Scams Call Grupo de Usaquén HackBox Bogotá, Colombia",
+  "year": "2025", 
   "license": "MIT"
 }
