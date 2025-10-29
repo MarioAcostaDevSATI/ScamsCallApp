@@ -32,6 +32,14 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Ruta de prueba para el formulario
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'Backend conectado correctamente',
+    version: '1.0.0'
+  });
+});
+
 // Manejo de errores global
 app.use((error, req, res, next) => {
   console.error('Error:', error);
