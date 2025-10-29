@@ -17,11 +17,17 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Rutas
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/reports', require('./routes/reports'));
-app.use('/api/chatbot', require('./routes/chatbot'));
-app.use('/api/agents', require('./routes/agents'));
+// Importar rutas
+const authRoutes = require('./routes/auth');
+const reportRoutes = require('./routes/reports');
+const chatbotRoutes = require('./routes/chatbot');
+const agentRoutes = require('./routes/agents');
+
+// Usar rutas
+app.use('/api/auth', authRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/chatbot', chatbotRoutes);
+app.use('/api/agents', agentRoutes);
 
 // Ruta de salud
 app.get('/api/health', (req, res) => {
@@ -62,6 +68,7 @@ app.use('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor ejecutándose en puerto ${PORT}`);
   console.log(`📍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
 });
 
 module.exports = app;
