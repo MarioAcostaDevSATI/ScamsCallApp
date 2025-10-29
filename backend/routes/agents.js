@@ -53,7 +53,7 @@ router.get('/dashboard', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error en agents dashboard:', error);
+    console.error('Error en agents dashboard:', error);
     res.status(500).json({
       success: false,
       message: 'Error obteniendo datos del dashboard',
@@ -84,7 +84,7 @@ router.get('/numbers/most-reported', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error obteniendo números reportados:', error);
+    console.error('Error obteniendo números reportados:', error);
     res.status(500).json({
       success: false,
       message: 'Error obteniendo números reportados',
