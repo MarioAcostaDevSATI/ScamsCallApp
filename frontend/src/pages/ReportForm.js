@@ -38,7 +38,7 @@ const ReportForm = () => {
       const response = await axios.post('http://localhost:5000/api/reports', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': 'Bearer temp_token' // Para MVP
         }
       });
 
@@ -51,11 +51,11 @@ const ReportForm = () => {
       reset();
       setImage(null);
     } catch (error) {
+      console.error('Error:', error);
       setSubmitResult({
         type: 'error',
         message: 'Error al enviar el reporte. Por favor intente nuevamente.'
       });
-      console.error('Error:', error);
     } finally {
       setIsSubmitting(false);
     }
