@@ -12,8 +12,9 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     uuid UUID DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
-    auth_provider VARCHAR(50) NOT NULL, -- 'local', 'google', 'apple'
-    provider_id VARCHAR(255), -- ID del proveedor OAuth
+    password VARCHAR(255),
+    auth_provider VARCHAR(50) NOT NULL DEFAULT 'local',
+    provider_id VARCHAR(255),
     full_name VARCHAR(255),
     phone_number VARCHAR(20),
     personal_data_consent BOOLEAN DEFAULT FALSE,
@@ -35,7 +36,7 @@ CREATE TABLE reports (
     status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'reviewed', 'action_taken', 'closed')),
     priority INTEGER DEFAULT 1 CHECK (priority BETWEEN 1 AND 3),
     location VARCHAR(100),
-    coordinates POINT,
+    coordinates VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -126,3 +127,8 @@ INSERT INTO users (email, auth_provider, full_name, personal_data_consent) VALUE
 
 INSERT INTO agents (user_id, institution, institutional_email, access_level) VALUES
 (2, 'Policía Nacional', 'agente@policia.gov.co', 3);
+
+-- Insertar algunos reportes de ejemplo
+INSERT INTO reports (user_id, phone_number, description, report_type, location) VALUES
+(1, '+573001234567', 'Me llamaron diciendo que gané un premio y me pidieron datos personales', 'estafa', 'Bogotá'),
+(1, '+573007654321', 'Persona que se hace pasar por funcionario del gobierno pidiendo transferencia', 'extorsion', 'Medellín');
