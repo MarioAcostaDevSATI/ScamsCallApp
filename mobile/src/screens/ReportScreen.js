@@ -36,8 +36,8 @@ const ReportScreen = ({ navigation }) => {
       quality: 0.8,
     });
 
-    if (!result.cancelled) {
-      setImage(result.uri);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -55,8 +55,8 @@ const ReportScreen = ({ navigation }) => {
       quality: 0.8,
     });
 
-    if (!result.cancelled) {
-      setImage(result.uri);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -75,10 +75,14 @@ const ReportScreen = ({ navigation }) => {
     formData.append('location', location);
     
     if (image) {
+      const filename = image.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename);
+      const type = match ? `image/${match[1]}` : 'image/jpeg';
+
       formData.append('evidence', {
         uri: image,
-        type: 'image/jpeg',
-        name: 'evidence.jpg'
+        type,
+        name: filename,
       });
     }
 
@@ -86,7 +90,7 @@ const ReportScreen = ({ navigation }) => {
       const response = await axios.post('http://localhost:5000/api/reports', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${await getAuthToken()}`
+          'Authorization': 'Bearer temp_token'
         }
       });
 
@@ -202,9 +206,6 @@ const ReportScreen = ({ navigation }) => {
   );
 };
 
-// Función auxiliar para obtener token (implementar después)
-const getAuthToken = async () => {
-  return 'temp_token';
-};
+export default ReportScreen;
 
 export default ReportScreen;
