@@ -8,33 +8,34 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const [statsResponse, recentResponse] = await Promise.all([
-          axios.get('http://localhost:5000/api/reports/stats'),
-          axios.get('http://localhost:5000/api/agents/dashboard')
-        ]);
-
-        setStats(statsResponse.data.data);
-        setRecentReports(recentResponse.data.data?.recent_reports || []);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-        // Datos de ejemplo para desarrollo
-        setStats([
-          { total_reports: '1247', unique_numbers: '856', report_type: 'estafa', report_date: '2024-01-15' },
-          { total_reports: '856', unique_numbers: '623', report_type: 'extorsion', report_date: '2024-01-15' }
-        ]);
-        setRecentReports([
-          { id: 1, phone_number: '+57 312 345 6789', report_type: 'estafa', created_at: '2024-01-15T10:30:00Z', status: 'pending' },
-          { id: 2, phone_number: '+57 320 987 6543', report_type: 'extorsion', created_at: '2024-01-15T09:15:00Z', status: 'reviewed' }
-        ]);
-      } finally {
-        setLoading(false);
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      const statsResponse = await apiService.getStats();
+      
+      if (statsResponse.success) {
+        setStats(statsResponse.data);
+        setRecentReports(statsResponse.data.recent_reports || []);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      // En caso de error, usar datos de demo
+      setStats({
+        total_reports: 3,
+        unique_numbers: 3,
+        by_type: { estafa: 1, extorsion: 1, phishing: 1 }
+      });
+      setRecentReports([
+        { id: 1, phone_number: '+573001234567', report_type: 'estafa', created_at: new Date().toISOString(), status: 'pending' },
+        { id: 2, phone_number: '+573009876543', report_type: 'extorsion', created_at: new Date().toISOString(), status: 'reviewed' }
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchDashboardData();
-  }, []);
+  fetchDashboardData();
+}, []);
 
   if (loading) {
     return (

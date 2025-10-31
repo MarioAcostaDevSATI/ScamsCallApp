@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from '../images/logo.png';
 import { Link, useLocation } from 'react-router-dom';
 import { Shield, Menu, X } from 'lucide-react';
 import { useState } from 'react';
@@ -18,10 +19,17 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <Shield className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-900">ScamsCall Colombia</span>
-          </Link>
+           <Link to="/" className="flex items-center space-x-3">
+  <img 
+    src={logo} 
+        alt="ScamsCall Logo" 
+        className="h-10 w-auto"
+  />
+  <div>
+    <span className="text-2xl font-bold text-gray-900 block">ScamsCall</span>
+    <span className="text-sm text-blue-600 font-semibold block">App</span>
+  </div>
+</Link>
 
           {/* Navegación para desktop */}
           <nav className="hidden md:flex space-x-8">

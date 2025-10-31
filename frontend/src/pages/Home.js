@@ -1,4 +1,5 @@
 import React from 'react';
+import logo2 from '../images/logo2.png';
 import { Link } from 'react-router-dom';
 import { Shield, AlertTriangle, BarChart3, Users, Phone, Mail } from 'lucide-react';
 
@@ -37,10 +38,17 @@ const Home = () => {
     <div className="space-y-16">
       {/* Hero Section */}
       <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
-          Protegiendo a los
-          <span className="text-blue-600"> Colombianos</span>
-        </h1>
+  <div className="flex justify-center">
+    <img 
+      src={logo2} 
+        alt="ScamsCall Logo 2" 
+        className="mx-auto h-32 w-auto"
+    />
+  </div>
+  <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
+    Protegiendo a los
+    <span className="text-blue-600"> Colombianos</span>
+  </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
           Plataforma colaborativa para reportar estafas telefónicas. 
           Juntos podemos combatir el fraude y crear una comunidad más segura.

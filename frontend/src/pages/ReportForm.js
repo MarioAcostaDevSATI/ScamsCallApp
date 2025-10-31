@@ -21,45 +21,43 @@ const ReportForm = () => {
   };
 
   const onSubmit = async (data) => {
-    setIsSubmitting(true);
-    setSubmitResult(null);
+  setIsSubmitting(true);
+  setSubmitResult(null);
 
-    const formData = new FormData();
-    formData.append('phone_number', data.phone_number);
-    formData.append('description', data.description);
-    formData.append('report_type', data.report_type);
-    formData.append('location', data.location);
-    
-    if (image) {
-      formData.append('evidence', image);
-    }
+  try {
+    const response = await apiService.submitReport({
+      phone_number: data.phone_number,
+      description: data.description,
+      report_type: data.report_type,
+      location: data.location,
+      // En demo no enviamos la imagen realmente
+    });
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/reports', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer temp_token' // Para MVP
-        }
-      });
-
+    if (response.success) {
       setSubmitResult({
         type: 'success',
-        message: '¡Reporte enviado exitosamente!',
-        trackingCode: response.data.data.tracking_code
+        message: response.message || '¡Reporte enviado exitosamente!',
+        trackingCode: response.data.tracking_code
       });
       
       reset();
       setImage(null);
-    } catch (error) {
-      console.error('Error:', error);
+    } else {
       setSubmitResult({
         type: 'error',
-        message: 'Error al enviar el reporte. Por favor intente nuevamente.'
+        message: response.message || 'Error al enviar el reporte.'
       });
-    } finally {
-      setIsSubmitting(false);
     }
-  };
+  } catch (error) {
+    console.error('Error:', error);
+    setSubmitResult({
+      type: 'error',
+      message: 'Error inesperado. Por favor intente nuevamente.'
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="max-w-2xl mx-auto">
