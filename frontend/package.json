@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Frontend web para plataforma de reporte de estafas telefónicas",
   "main": "src/index.js",
-  "homepage": "hthttps://marioacostadevsati.github.io/ScamsCallAPP",
+  "homepage": "https://marioacostadevsati.github.io/ScamsCallAPP",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
