@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo2.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2563EB" />
+    <meta name="description" content="Plataforma MVP de Hackabox | Producto y servicio para reportes de fraudes" />
+    <meta name="keywords" content="estafas telefónicas, Colombia, reportar, seguridad, Policía Nacional, GAULA" />
+    <meta name="author" content="Mario Acosta | Alejandra Peña | Samuel Cortés - Hackabox Colombia, 2025" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="ScamsCall App - Reporta Estafas Telefónicas" />
+    <meta property="og:description" content="Plataforma colaborativa para proteger a los colombianos de estafas telefónicas" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/logo2.png" />
+    
+    <!-- Preload fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <title>ScamsCall App - Prototipo de plataforma de Reporte de Estafas</title>
+  </head>
+  <body class="font-sans antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Script de accesibilidad -->
+    <script>
+      // Detectar preferencias de usuario
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('reduce-motion');
+      }
+      
+      // Alto contraste
+      if (window.matchMedia('(prefers-contrast: high)').matches) {
+        document.documentElement.classList.add('high-contrast');
+      }
+    </script>
+  </body>
+</html>
