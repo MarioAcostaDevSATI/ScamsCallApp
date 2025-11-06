@@ -1,15 +1,15 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production'
+
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
-  basePath: '/ScamsCallApp',
-  assetPrefix: '/ScamsCallApp/',
+  basePath: isProd ? '/ScamsCallApp' : '',
+  assetPrefix: isProd ? '/ScamsCallApp/' : '',
   images: {
     unoptimized: true
   },
-  experimental: {
-    appDir: true,
-  },
+  // REMOVER la configuración experimental de appDir
 }
 
 module.exports = nextConfig
