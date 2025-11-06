@@ -1,5 +1,5 @@
 {
-  "name": "scams-call-colombia",
+  "name": "scams-call-App",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -32,3 +32,4 @@
     "postcss": "^8.4.0"
   }
 }
+
