@@ -4,52 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scams Call - Reporta Estafas Telefónicas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            text-align: center;
-            background: white;
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-width: 500px;
-        }
-        h1 {
-            color: #1a365d;
-            margin-bottom: 1rem;
-        }
-        p {
-            color: #4a5568;
-            margin-bottom: 2rem;
-        }
-        .loading {
-            color: #718096;
-            font-style: italic;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div class="container">
-        <h1>🚨 Scams Call Colombia</h1>
-        <p>Plataforma para reportar estafas telefónicas</p>
-        <p class="loading">La aplicación se está cargando...</p>
-        <p>Si ves este mensaje por más de 1 minuto, recarga la página.</p>
+        <header class="header">
+            <h1>🚨 Scams Call App</h1>
+            <p class="subtitle">Reporta estafas telefónicas y protege a tu comunidad</p>
+        </header>
+
+        <main class="main-content">
+            <div class="form-container">
+                <form id="reportForm" class="report-form">
+                    <div class="form-group">
+                        <label for="phone">Número telefónico *</label>
+                        <input type="tel" id="phone" name="phone" 
+                               placeholder="Ej: 3001234567" required
+                               pattern="[0-9+]{10,15}">
+                        <span class="error-message" id="phoneError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scamType">Tipo de estafa *</label>
+                        <select id="scamType" name="scamType" required>
+                            <option value="">Selecciona el tipo</option>
+                            <option value="financial">💰 Estafa financiera</option>
+                            <option value="threat">⚠️ Amenazas o extorsión</option>
+                            <option value="identity">🆔 Suplantación de identidad</option>
+                            <option value="service">📞 Fraude de servicios</option>
+                            <option value="prize">🎁 Estafa de premios</option>
+                            <option value="tech">💻 Soporte técnico falso</option>
+                            <option value="other">❓ Otro tipo</option>
+                        </select>
+                        <span class="error-message" id="scamTypeError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">¿Qué sucedió? (Opcional)</label>
+                        <textarea id="description" name="description" 
+                                  placeholder="Describe lo que te dijeron, cómo fue la estafa..."
+                                  maxlength="1000" rows="4"></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span>/1000 caracteres
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">¿Dónde ocurrió? (Opcional)</label>
+                        <input type="text" id="location" name="location" 
+                               placeholder="Ciudad o municipio">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="anonymous" name="anonymous">
+                        <label for="anonymous">Enviar reporte de forma anónima</label>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        🚨 Enviar Reporte
+                    </button>
+                </form>
+
+                <div id="successMessage" class="success-message hidden">
+                    ✅ Reporte enviado exitosamente. ¡Gracias por contribuir a la seguridad colectiva!
+                </div>
+            </div>
+
+            <div class="info-cards">
+                <div class="card">
+                    <div class="card-icon">📞</div>
+                    <h3>Reporta Llamadas</h3>
+                    <p>Números sospechosos y estafas telefónicas</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🛡️</div>
+                    <h3>Protege a Otros</h3>
+                    <p>Tu reporte alerta a la comunidad</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h3>Datos en Tiempo Real</h3>
+                    <p>Análisis de patrones de estafas</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Al usar esta plataforma, aceptas nuestra Política de Privacidad y confirmas que la información es veraz según la Ley 1581 de 2012.</p>
+        </footer>
     </div>
-    
-    <script>
-        // Redirigir a la aplicación Next.js
-        setTimeout(() => {
-            window.location.href = '/ScamsCallApp/';
-        }, 2000);
-    </script>
+
+    <script src="script.js"></script>
 </body>
 </html>
