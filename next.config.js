@@ -8,8 +8,7 @@ const nextConfig = {
   assetPrefix: isProd ? '/ScamsCallApp/' : '',
   images: {
     unoptimized: true
-  },
-  // REMOVER la configuración experimental de appDir
+  }
 }
 
 module.exports = nextConfig
