@@ -1,7 +1,7 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Scams Call Colombia',
+  title: 'Scams Call App',
   description: 'Plataforma colaborativa para reportar estafas telefónicas',
 }
 
