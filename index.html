@@ -3,98 +3,1159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scams Call - Reporta Estafas Telefónicas</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+    <title>Scams Call - Plataforma de Reporte de Estafas Telefónicas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== VARIABLES Y RESET ===== */
+        :root {
+            --primary: #2E7D32;
+            --primary-dark: #1B5E20;
+            --primary-light: #4CAF50;
+            --secondary: #FF6D00;
+            --secondary-dark: #E65100;
+            --accent: #2196F3;
+            --text: #2E3440;
+            --text-light: #4C566A;
+            --background: #F8F9FA;
+            --surface: #FFFFFF;
+            --error: #D32F2F;
+            --success: #388E3C;
+            --warning: #F57C00;
+            --border: #E0E0E0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== TIPOGRAFÍA ACCESIBLE ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+        }
+
+        /* ===== LAYOUT PRINCIPAL ===== */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ===== COMPONENTES REUTILIZABLES ===== */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: #1976D2;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== VISTAS ===== */
+        .view {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== ONBOARDING ===== */
+        .onboarding-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .step-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .step-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .step-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: var(--transition);
+        }
+
+        .step-indicator.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        /* ===== FORMULARIOS ===== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--surface);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* ===== DASHBOARDS ===== */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .reports-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .report-item {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent);
+            transition: var(--transition);
+        }
+
+        .report-item:hover {
+            transform: translateX(5px);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .report-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending { background: #FFF3E0; color: var(--warning); }
+        .status-investigating { background: #E3F2FD; color: var(--accent); }
+        .status-resolved { background: #E8F5E8; color: var(--success); }
+
+        /* ===== NAVEGACIÓN ===== */
+        .nav-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .nav-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* ===== ACCESIBILIDAD ===== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border: #000000;
+                --shadow: 0 2px 8px rgba(0,0,0,0.3);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                overflow-x: auto;
+            }
+        }
+
+        /* ===== ESTADOS DE FORMULARIO ===== */
+        .form-input.error {
+            border-color: var(--error);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: var(--success);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>🚨 Scams Call App</h1>
-            <p class="subtitle">Reporta estafas telefónicas y protege a tu comunidad</p>
-        </header>
-
-        <main class="main-content">
-            <div class="form-container">
-                <form id="reportForm" class="report-form">
-                    <div class="form-group">
-                        <label for="phone">Número telefónico *</label>
-                        <input type="tel" id="phone" name="phone" 
-                               placeholder="Ej: 3001234567" required
-                               pattern="[0-9+]{10,15}">
-                        <span class="error-message" id="phoneError"></span>
+    <div class="app-container">
+        <!-- Vista de Onboarding -->
+        <div id="onboardingView" class="view active">
+            <div class="main-content">
+                <div class="onboarding-steps">
+                    <!-- Paso 1: Bienvenida -->
+                    <div class="step" id="step1">
+                        <div class="step-icon">🚨</div>
+                        <h1>Bienvenido a Scams Call</h1>
+                        <p>Tu plataforma confiable para reportar estafas telefónicas en Colombia</p>
+                        <p class="text-light">Ayuda a proteger a tu comunidad reportando números sospechosos</p>
+                        <button class="btn" onclick="nextOnboardingStep(2)">
+                            Comenzar <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
 
-                    <div class="form-group">
-                        <label for="scamType">Tipo de estafa *</label>
-                        <select id="scamType" name="scamType" required>
-                            <option value="">Selecciona el tipo</option>
-                            <option value="financial">💰 Estafa financiera</option>
-                            <option value="threat">⚠️ Amenazas o extorsión</option>
-                            <option value="identity">🆔 Suplantación de identidad</option>
-                            <option value="service">📞 Fraude de servicios</option>
-                            <option value="prize">🎁 Estafa de premios</option>
-                            <option value="tech">💻 Soporte técnico falso</option>
-                            <option value="other">❓ Otro tipo</option>
-                        </select>
-                        <span class="error-message" id="scamTypeError"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description">¿Qué sucedió? (Opcional)</label>
-                        <textarea id="description" name="description" 
-                                  placeholder="Describe lo que te dijeron, cómo fue la estafa..."
-                                  maxlength="1000" rows="4"></textarea>
-                        <div class="char-count">
-                            <span id="charCount">0</span>/1000 caracteres
+                    <!-- Paso 2: Cómo funciona -->
+                    <div class="step" id="step2" style="display: none;">
+                        <div class="step-icon">📱</div>
+                        <h2>¿Cómo funciona?</h2>
+                        <div style="text-align: left; max-width: 500px; margin: 0 auto;">
+                            <p><strong>1.</strong> Reporta números desconocidos o sospechosos</p>
+                            <p><strong>2.</strong> Describe lo que sucedió en la llamada</p>
+                            <p><strong>3.</strong> Recibe seguimiento de tus reportes</p>
+                            <p><strong>4.</strong> Ayuda a prevenir estafas en tu comunidad</p>
                         </div>
+                        <button class="btn" onclick="nextOnboardingStep(3)">
+                            Siguiente <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
 
-                    <div class="form-group">
-                        <label for="location">¿Dónde ocurrió? (Opcional)</label>
-                        <input type="text" id="location" name="location" 
-                               placeholder="Ciudad o municipio">
+                    <!-- Paso 3: Selección de rol -->
+                    <div class="step" id="step3" style="display: none;">
+                        <div class="step-icon">👥</div>
+                        <h2>Selecciona tu perfil</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 500px; margin: 2rem auto;">
+                            <button class="btn-outline" onclick="selectRole('citizen')">
+                                <i class="fas fa-user"></i>
+                                Ciudadano
+                            </button>
+                            <button class="btn-outline" onclick="selectRole('agent')">
+                                <i class="fas fa-shield-alt"></i>
+                                Agente
+                            </button>
+                        </div>
+                        <p class="text-light">Los agentes deben tener credenciales verificadas</p>
                     </div>
+                </div>
 
-                    <div class="form-group checkbox-group">
-                        <input type="checkbox" id="anonymous" name="anonymous">
-                        <label for="anonymous">Enviar reporte de forma anónima</label>
-                    </div>
-
-                    <button type="submit" class="submit-btn">
-                        🚨 Enviar Reporte
-                    </button>
-                </form>
-
-                <div id="successMessage" class="success-message hidden">
-                    ✅ Reporte enviado exitosamente. ¡Gracias por contribuir a la seguridad colectiva!
+                <div class="step-indicators">
+                    <div class="step-indicator active" id="indicator1"></div>
+                    <div class="step-indicator" id="indicator2"></div>
+                    <div class="step-indicator" id="indicator3"></div>
                 </div>
             </div>
+        </div>
 
-            <div class="info-cards">
-                <div class="card">
-                    <div class="card-icon">📞</div>
-                    <h3>Reporta Llamadas</h3>
-                    <p>Números sospechosos y estafas telefónicas</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">🛡️</div>
-                    <h3>Protege a Otros</h3>
-                    <p>Tu reporte alerta a la comunidad</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">📊</div>
-                    <h3>Datos en Tiempo Real</h3>
-                    <p>Análisis de patrones de estafas</p>
+        <!-- Vista de Login Ciudadano -->
+        <div id="citizenLoginView" class="view">
+            <div class="main-content">
+                <div class="card" style="max-width: 400px; margin: 0 auto;">
+                    <h2 style="text-align: center;">Acceso Ciudadano</h2>
+                    <form id="citizenLoginForm">
+                        <div class="form-group">
+                            <label for="citizenEmail" class="form-label">Correo electrónico</label>
+                            <input type="email" id="citizenEmail" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="citizenPassword" class="form-label">Contraseña</label>
+                            <input type="password" id="citizenPassword" class="form-input" required>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Ingresar
+                        </button>
+                    </form>
+                    <p style="text-align: center; margin-top: 1rem;">
+                        ¿No tienes cuenta? 
+                        <a href="#" onclick="showView('citizenRegisterView')" style="color: var(--primary);">Regístrate aquí</a>
+                    </p>
                 </div>
             </div>
-        </main>
+        </div>
 
-        <footer class="footer">
-            <p>Al usar esta plataforma, aceptas nuestra Política de Privacidad y confirmas que la información es veraz según la Ley 1581 de 2012.</p>
-        </footer>
+        <!-- Vista de Registro Ciudadano -->
+        <div id="citizenRegisterView" class="view">
+            <div class="main-content">
+                <div class="card" style="max-width: 500px; margin: 0 auto;">
+                    <h2 style="text-align: center;">Registro Ciudadano</h2>
+                    <form id="citizenRegisterForm">
+                        <div class="form-group">
+                            <label for="regName" class="form-label">Nombre completo</label>
+                            <input type="text" id="regName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail" class="form-label">Correo electrónico</label>
+                            <input type="email" id="regEmail" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPhone" class="form-label">Teléfono (opcional)</label>
+                            <input type="tel" id="regPhone" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword" class="form-label">Contraseña</label>
+                            <input type="password" id="regPassword" class="form-input" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="regConsent" required>
+                                <label for="regConsent">Acepto la Política de Privacidad y tratamiento de datos según Ley 1581 de 2012</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <i class="fas fa-user-plus"></i>
+                            Registrarse
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista de Login Agente -->
+        <div id="agentLoginView" class="view">
+            <div class="main-content">
+                <div class="card" style="max-width: 400px; margin: 0 auto;">
+                    <h2 style="text-align: center;">Acceso Agente</h2>
+                    <form id="agentLoginForm">
+                        <div class="form-group">
+                            <label for="agentInstitution" class="form-label">Institución</label>
+                            <select id="agentInstitution" class="form-select" required>
+                                <option value="">Selecciona tu institución</option>
+                                <option value="policia">Policía Nacional</option>
+                                <option value="fiscalia">Fiscalía General</option>
+                                <option value="gaula">GAULA Militar</option>
+                                <option value="ejercito">Ejército Nacional</option>
+                                <option value="otra">Otra institución</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="agentEmail" class="form-label">Correo institucional</label>
+                            <input type="email" id="agentEmail" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="agentPassword" class="form-label">Contraseña</label>
+                            <input type="password" id="agentPassword" class="form-input" required>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <i class="fas fa-shield-alt"></i>
+                            Ingresar como Agente
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Ciudadano -->
+        <div id="citizenDashboardView" class="view">
+            <div class="main-content">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Mi Dashboard</h1>
+                        <p>Bienvenido de nuevo, <span id="userName">Usuario</span></p>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn" onclick="showView('reportView')">
+                            <i class="fas fa-plus"></i>
+                            Nuevo Reporte
+                        </button>
+                        <button class="btn-outline" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Salir
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalReports">0</div>
+                        <div class="stat-label">Reportes Totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingReports">0</div>
+                        <div class="stat-label">En Investigación</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="resolvedReports">0</div>
+                        <div class="stat-label">Resueltos</div>
+                    </div>
+                </div>
+
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="switchTab('myReports')">Mis Reportes</button>
+                    <button class="nav-tab" onclick="switchTab('alerts')">Alertas Recientes</button>
+                    <button class="nav-tab" onclick="switchTab('help')">Ayuda</button>
+                </div>
+
+                <div id="myReportsTab" class="tab-content">
+                    <h3>Mis Reportes Recientes</h3>
+                    <div class="reports-list" id="citizenReportsList">
+                        <!-- Los reportes se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+
+                <div id="alertsTab" class="tab-content" style="display: none;">
+                    <h3>Alertas de la Comunidad</h3>
+                    <div class="card">
+                        <p>Aquí verás las últimas estafas reportadas en tu zona para que estés alerta.</p>
+                        <!-- Las alertas se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+
+                <div id="helpTab" class="tab-content" style="display: none;">
+                    <h3>Centro de Ayuda</h3>
+                    <div class="card">
+                        <h4>¿Cómo identificar una estafa telefónica?</h4>
+                        <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Te piden información personal o bancaria</li>
+                            <li>Ofrecen premios o beneficios inesperados</li>
+                            <li>Suplantan identidad de entidades oficiales</li>
+                            <li>Presionan para tomar decisiones rápidas</li>
+                        </ul>
+                        <h4>¿Qué hacer si recibes una llamada sospechosa?</h4>
+                        <ul style="margin-left: 1.5rem;">
+                            <li>No proporciones información personal</li>
+                            <li>Cuelga y reporta el número inmediatamente</li>
+                            <li>Verifica la información con la entidad oficial</li>
+                            <li>Comunica a tus familiares y amigos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Agente -->
+        <div id="agentDashboardView" class="view">
+            <div class="main-content">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Dashboard de Agente</h1>
+                        <p>Institución: <span id="agentInstitutionName">Policía Nacional</span></p>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn-outline" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Salir
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="agentTotalReports">0</div>
+                        <div class="stat-label">Reportes Totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="agentNewReports">0</div>
+                        <div class="stat-label">Nuevos Reportes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="agentUrgentReports">0</div>
+                        <div class="stat-label">Casos Urgentes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="agentResolved">0</div>
+                        <div class="stat-label">Resueltos Hoy</div>
+                    </div>
+                </div>
+
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="switchAgentTab('allReports')">Todos los Reportes</button>
+                    <button class="nav-tab" onclick="switchAgentTab('myCases')">Mis Casos</button>
+                    <button class="nav-tab" onclick="switchAgentTab('analytics')">Analíticas</button>
+                </div>
+
+                <div id="allReportsTab" class="tab-content">
+                    <h3>Reportes Recientes</h3>
+                    <div class="reports-list" id="agentReportsList">
+                        <!-- Los reportes se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+
+                <div id="myCasesTab" class="tab-content" style="display: none;">
+                    <h3>Casos Asignados</h3>
+                    <div class="card">
+                        <p>Aquí verás los casos que tienes asignados para investigación.</p>
+                        <!-- Los casos asignados se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+
+                <div id="analyticsTab" class="tab-content" style="display: none;">
+                    <h3>Analíticas de Estafas</h3>
+                    <div class="card">
+                        <p>Estadísticas y patrones detectados en los reportes de estafas.</p>
+                        <!-- Las analíticas se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista de Reporte -->
+        <div id="reportView" class="view">
+            <div class="main-content">
+                <div class="card">
+                    <h2>Reportar Estafa Telefónica</h2>
+                    <p>Tu reporte ayuda a proteger a la comunidad. Toda la información es confidencial.</p>
+
+                    <form id="reportForm">
+                        <div class="form-group">
+                            <label for="reportPhone" class="form-label">Número telefónico</label>
+                            <input type="text" id="reportPhone" class="form-input" 
+                                   placeholder="Ej: 3001234567, +573001234567, o 'Desconocido'">
+                            <div class="error-message" id="phoneError">Por favor ingresa un número válido o "Desconocido"</div>
+                            <small style="color: var(--text-light); margin-top: 0.5rem; display: block;">
+                                Si no conoces el número, escribe "Desconocido" o "Privado". Aceptamos todos los formatos: 3001234567, +57 300 123 4567, etc.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="scamType" class="form-label">Tipo de estafa *</label>
+                            <select id="scamType" class="form-select" required>
+                                <option value="">Selecciona el tipo de estafa</option>
+                                <option value="financial">💰 Estafa financiera (créditos, inversiones)</option>
+                                <option value="threat">⚠️ Amenazas o extorsión</option>
+                                <option value="identity">🆔 Suplantación de identidad</option>
+                                <option value="service">📞 Fraude de servicios</option>
+                                <option value="prize">🎁 Estafa de premios o loterías</option>
+                                <option value="tech">💻 Soporte técnico falso</option>
+                                <option value="romance">❤️ Estafa romántica</option>
+                                <option value="other">❓ Otro tipo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="form-label">Descripción de lo sucedido *</label>
+                            <textarea id="description" class="form-textarea" 
+                                      placeholder="Describe con detalle lo que te dijeron, cómo fue la estafa, qué información te pidieron..."
+                                      required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="callDate" class="form-label">Fecha y hora de la llamada</label>
+                            <input type="datetime-local" id="callDate" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location" class="form-label">Ubicación (opcional)</label>
+                            <input type="text" id="location" class="form-input" placeholder="Ciudad o municipio donde recibiste la llamada">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="anonymous" name="anonymous">
+                                <label for="anonymous">Reportar de forma anónima</label>
+                            </div>
+                        </div>
+
+                        <div class="success-message" id="reportSuccess">
+                            ✅ Reporte enviado exitosamente. ¡Gracias por contribuir a la seguridad colectiva!
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-paper-plane"></i>
+                                Enviar Reporte
+                            </button>
+                            <button type="button" class="btn-outline" onclick="showView('citizenDashboardView')">
+                                <i class="fas fa-arrow-left"></i>
+                                Volver al Dashboard
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // ===== DATOS DE SIMULACIÓN =====
+        // En una aplicación real, estos datos vendrían de una base de datos
+        let currentUser = null;
+        let reports = JSON.parse(localStorage.getItem('scamReports')) || [];
+        let users = JSON.parse(localStorage.getItem('scamUsers')) || [];
+
+        // ===== FUNCIONES DE NAVEGACIÓN =====
+        function showView(viewId) {
+            // Ocultar todas las vistas
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Mostrar la vista solicitada
+            document.getElementById(viewId).classList.add('active');
+            
+            // Actualizar dashboards si es necesario
+            if (viewId === 'citizenDashboardView') {
+                updateCitizenDashboard();
+            } else if (viewId === 'agentDashboardView') {
+                updateAgentDashboard();
+            }
+        }
+
+        function nextOnboardingStep(stepNumber) {
+            // Ocultar todos los pasos
+            document.querySelectorAll('.onboarding-steps .step').forEach(step => {
+                step.style.display = 'none';
+            });
+            
+            // Mostrar el paso solicitado
+            document.getElementById(`step${stepNumber}`).style.display = 'block';
+            
+            // Actualizar indicadores
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                indicator.classList.toggle('active', index + 1 === stepNumber);
+            });
+        }
+
+        function selectRole(role) {
+            if (role === 'citizen') {
+                showView('citizenLoginView');
+            } else if (role === 'agent') {
+                showView('agentLoginView');
+            }
+        }
+
+        function switchTab(tabName) {
+            // Actualizar pestañas activas
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Mostrar contenido correspondiente
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`${tabName}Tab`).style.display = 'block';
+        }
+
+        function switchAgentTab(tabName) {
+            // Actualizar pestañas activas
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Mostrar contenido correspondiente
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`${tabName}Tab`).style.display = 'block';
+        }
+
+        // ===== MANEJO DE FORMULARIOS =====
+        document.getElementById('citizenLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('citizenEmail').value;
+            const password = document.getElementById('citizenPassword').value;
+            
+            // Simulación de login - en una app real, esto verificaría con un backend
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                document.getElementById('userName').textContent = user.name;
+                showView('citizenDashboardView');
+            } else {
+                // Crear usuario demo si no existe
+                currentUser = {
+                    id: Date.now(),
+                    name: 'Usuario Demo',
+                    email: email,
+                    role: 'citizen'
+                };
+                users.push({...currentUser, password: password});
+                localStorage.setItem('scamUsers', JSON.stringify(users));
+                document.getElementById('userName').textContent = 'Usuario Demo';
+                showView('citizenDashboardView');
+            }
+        });
+
+        document.getElementById('citizenRegisterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            
+            // Registrar nuevo usuario
+            currentUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                role: 'citizen'
+            };
+            users.push({...currentUser, password: password});
+            localStorage.setItem('scamUsers', JSON.stringify(users));
+            
+            document.getElementById('userName').textContent = name;
+            showView('citizenDashboardView');
+        });
+
+        document.getElementById('agentLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const institution = document.getElementById('agentInstitution').value;
+            const email = document.getElementById('agentEmail').value;
+            
+            // Simular login de agente
+            currentUser = {
+                id: Date.now(),
+                name: 'Agente Demo',
+                email: email,
+                role: 'agent',
+                institution: institution
+            };
+            
+            document.getElementById('agentInstitutionName').textContent = 
+                document.getElementById('agentInstitution').options[document.getElementById('agentInstitution').selectedIndex].text;
+            
+            showView('agentDashboardView');
+        });
+
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validar formulario
+            const phone = document.getElementById('reportPhone').value;
+            const scamType = document.getElementById('scamType').value;
+            const description = document.getElementById('description').value;
+            
+            if (!phone.trim()) {
+                document.getElementById('phoneError').classList.add('show');
+                return;
+            } else {
+                document.getElementById('phoneError').classList.remove('show');
+            }
+            
+            if (!scamType || !description.trim()) {
+                alert('Por favor completa todos los campos obligatorios');
+                return;
+            }
+            
+            // Crear nuevo reporte
+            const newReport = {
+                id: Date.now(),
+                phone: phone,
+                scamType: scamType,
+                description: description,
+                callDate: document.getElementById('callDate').value || new Date().toISOString(),
+                location: document.getElementById('location').value,
+                anonymous: document.getElementById('anonymous').checked,
+                status: 'pending',
+                citizen: currentUser.name,
+                citizenEmail: currentUser.email,
+                createdAt: new Date().toISOString()
+            };
+            
+            reports.push(newReport);
+            localStorage.setItem('scamReports', JSON.stringify(reports));
+            
+            // Mostrar mensaje de éxito
+            document.getElementById('reportSuccess').classList.add('show');
+            
+            // Resetear formulario después de 3 segundos
+            setTimeout(() => {
+                document.getElementById('reportForm').reset();
+                document.getElementById('reportSuccess').classList.remove('show');
+                showView('citizenDashboardView');
+            }, 3000);
+        });
+
+        // ===== ACTUALIZACIÓN DE DASHBOARDS =====
+        function updateCitizenDashboard() {
+            if (!currentUser) return;
+            
+            // Filtrar reportes del usuario actual
+            const userReports = reports.filter(report => report.citizenEmail === currentUser.email);
+            const pendingReports = userReports.filter(report => report.status === 'pending');
+            const resolvedReports = userReports.filter(report => report.status === 'resolved');
+            
+            // Actualizar estadísticas
+            document.getElementById('totalReports').textContent = userReports.length;
+            document.getElementById('pendingReports').textContent = pendingReports.length;
+            document.getElementById('resolvedReports').textContent = resolvedReports.length;
+            
+            // Actualizar lista de reportes
+            const reportsList = document.getElementById('citizenReportsList');
+            reportsList.innerHTML = '';
+            
+            userReports.slice(0, 5).forEach(report => {
+                const reportElement = document.createElement('div');
+                reportElement.className = 'report-item';
+                reportElement.innerHTML = `
+                    <div class="report-header">
+                        <div>
+                            <h4>Reporte #${report.id}</h4>
+                            <p>Número: ${report.phone}</p>
+                        </div>
+                        <span class="report-status status-${report.status}">
+                            ${report.status === 'pending' ? 'En Investigación' : 
+                              report.status === 'resolved' ? 'Resuelto' : 'En Proceso'}
+                        </span>
+                    </div>
+                    <p><strong>Tipo:</strong> ${getScamTypeText(report.scamType)}</p>
+                    <p>${report.description.substring(0, 100)}...</p>
+                    <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.5rem;">
+                        Reportado el ${new Date(report.createdAt).toLocaleDateString()}
+                    </p>
+                `;
+                reportsList.appendChild(reportElement);
+            });
+            
+            if (userReports.length === 0) {
+                reportsList.innerHTML = `
+                    <div class="card">
+                        <p>Aún no has realizado reportes. 
+                           <a href="#" onclick="showView('reportView')" style="color: var(--primary);">Haz tu primer reporte</a>
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateAgentDashboard() {
+            // Actualizar estadísticas del agente
+            document.getElementById('agentTotalReports').textContent = reports.length;
+            document.getElementById('agentNewReports').textContent = 
+                reports.filter(r => {
+                    const reportDate = new Date(r.createdAt);
+                    const today = new Date();
+                    return reportDate.toDateString() === today.toDateString();
+                }).length;
+            document.getElementById('agentUrgentReports').textContent = 
+                reports.filter(r => r.scamType === 'threat' && r.status === 'pending').length;
+            document.getElementById('agentResolved').textContent = 
+                reports.filter(r => r.status === 'resolved').length;
+            
+            // Actualizar lista de reportes para el agente
+            const reportsList = document.getElementById('agentReportsList');
+            reportsList.innerHTML = '';
+            
+            reports.slice(0, 10).forEach(report => {
+                const reportElement = document.createElement('div');
+                reportElement.className = 'report-item';
+                reportElement.innerHTML = `
+                    <div class="report-header">
+                        <div>
+                            <h4>Reporte #${report.id}</h4>
+                            <p>Número: ${report.phone} | ${report.citizen}</p>
+                        </div>
+                        <span class="report-status status-${report.status}">
+                            ${report.status === 'pending' ? 'Pendiente' : 
+                              report.status === 'resolved' ? 'Resuelto' : 'En Investigación'}
+                        </span>
+                    </div>
+                    <p><strong>Tipo:</strong> ${getScamTypeText(report.scamType)}</p>
+                    <p>${report.description.substring(0, 150)}...</p>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            <i class="fas fa-eye"></i> Ver Detalles
+                        </button>
+                        <button class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            <i class="fas fa-edit"></i> Asignar
+                        </button>
+                    </div>
+                `;
+                reportsList.appendChild(reportElement);
+            });
+            
+            if (reports.length === 0) {
+                reportsList.innerHTML = `
+                    <div class="card">
+                        <p>No hay reportes pendientes.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ===== FUNCIONES AUXILIARES =====
+        function getScamTypeText(type) {
+            const types = {
+                'financial': 'Estafa financiera',
+                'threat': 'Amenazas o extorsión',
+                'identity': 'Suplantación de identidad',
+                'service': 'Fraude de servicios',
+                'prize': 'Estafa de premios',
+                'tech': 'Soporte técnico falso',
+                'romance': 'Estafa romántica',
+                'other': 'Otro tipo'
+            };
+            return types[type] || 'Desconocido';
+        }
+
+        function logout() {
+            currentUser = null;
+            showView('onboardingView');
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar datos de ejemplo si no existen
+            if (reports.length === 0) {
+                reports = [
+                    {
+                        id: 1,
+                        phone: "3001234567",
+                        scamType: "financial",
+                        description: "Me llamaron ofreciendo un crédito con tasa 0% y me pidieron datos personales y bancarios.",
+                        callDate: new Date().toISOString(),
+                        location: "Bogotá",
+                        anonymous: false,
+                        status: "pending",
+                        citizen: "Juan Pérez",
+                        citizenEmail: "juan@example.com",
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 2,
+                        phone: "Desconocido",
+                        scamType: "threat",
+                        description: "Llamada anónima con amenazas de secuestro si no realizaba un pago.",
+                        callDate: new Date(Date.now() - 86400000).toISOString(),
+                        location: "Medellín",
+                        anonymous: true,
+                        status: "investigating",
+                        citizen: "Ana García",
+                        citizenEmail: "ana@example.com",
+                        createdAt: new Date(Date.now() - 86400000).toISOString()
+                    }
+                ];
+                localStorage.setItem('scamReports', JSON.stringify(reports));
+            }
+            
+            // Verificar si hay un usuario en sesión
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                if (currentUser.role === 'citizen') {
+                    document.getElementById('userName').textContent = currentUser.name;
+                    showView('citizenDashboardView');
+                } else if (currentUser.role === 'agent') {
+                    showView('agentDashboardView');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
