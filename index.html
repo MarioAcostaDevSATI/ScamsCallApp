@@ -5,38 +5,1866 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scams Call - Plataforma de Reporte de Estafas Telefónicas</title>
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    
-    <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Nuestros estilos -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/accessibility.css">
+    <style>
+        /* ===== VARIABLES CSS - PSICOLOGÍA DE COLORES ===== */
+        :root {
+            /* Colores principales - Tecnología y Confianza */
+            --primary-blue: #2563EB;       /* Azul confiable */
+            --primary-blue-dark: #1D4ED8;  /* Azul más oscuro */
+            --primary-blue-light: #3B82F6; /* Azul más claro */
+            
+            --accent-teal: #0D9488;        /* Verde azulado - Responsable */
+            --accent-teal-light: #14B8A6;  /* Verde azulado claro */
+            
+            --success-green: #059669;      /* Verde - Honestidad */
+            --warning-orange: #EA580C;     /* Naranja - Alerta */
+            --error-red: #DC2626;          /* Rojo - Error */
+            
+            /* Escala de grises - Neutralidad */
+            --text-primary: #1F2937;       /* Texto principal */
+            --text-secondary: #6B7280;     /* Texto secundario */
+            --text-light: #9CA3AF;         /* Texto claro */
+            
+            --background: #F9FAFB;         /* Fondo principal */
+            --surface: #FFFFFF;            /* Superficies */
+            --border: #E5E7EB;             /* Bordes */
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            
+            /* Variables de diseño */
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ===== RESET Y ESTILOS BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== TIPOGRAFÍA ESCALABLE ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        h1 { 
+            font-size: clamp(2rem, 5vw, 2.5rem); 
+            font-weight: 700;
+        }
+
+        h2 { 
+            font-size: clamp(1.75rem, 4vw, 2rem); 
+        }
+
+        h3 { 
+            font-size: clamp(1.5rem, 3vw, 1.75rem); 
+        }
+
+        /* ===== LAYOUT PRINCIPAL ===== */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ===== COMPONENTES BASE ===== */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            background: var(--primary-blue);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--accent-teal);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-teal-light);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* ===== VISTAS Y ANIMACIONES ===== */
+        .view {
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem 0.5rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0.5rem;
+            }
+            
+            .card {
+                padding: 1rem;
+                border-radius: var(--radius-md);
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .main-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo-text {
+            height: 30px;
+            width: auto;
+        }
+
+        /* ===== FOOTER ===== */
+        .main-footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        /* ===== ONBOARDING ===== */
+        .onboarding-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .step {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+        }
+
+        .step-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-blue);
+        }
+
+        .step-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .step-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: var(--transition);
+        }
+
+        .step-indicator.active {
+            background: var(--primary-blue);
+            transform: scale(1.2);
+        }
+
+        /* ===== FORMULARIOS ===== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--surface);
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            border-radius: var(--radius-sm);
+        }
+
+        /* ===== DASHBOARDS ===== */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-left: 4px solid var(--primary-blue);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* ===== NAVEGACIÓN ===== */
+        .nav-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* ===== LISTAS DE REPORTES ===== */
+        .reports-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .report-item {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent-teal);
+            transition: var(--transition);
+        }
+
+        .report-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .report-status {
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending { 
+            background: #FEF3C7; 
+            color: #D97706; 
+        }
+
+        .status-investigating { 
+            background: #DBEAFE; 
+            color: var(--primary-blue); 
+        }
+
+        .status-resolved { 
+            background: #D1FAE5; 
+            color: var(--success-green); 
+        }
+
+        /* ===== ACCESIBILIDAD - CONTROLES ===== */
+        .accessibility-bar {
+            background: var(--text-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .accessibility-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .accessibility-btn:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        /* ===== ALTO CONTRASTE ===== */
+        body.high-contrast {
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --background: #FFFFFF;
+            --surface: #FFFFFF;
+            --border: #000000;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        body.high-contrast .card {
+            border: 2px solid var(--text-primary);
+        }
+
+        body.high-contrast .btn {
+            border: 2px solid var(--text-primary);
+        }
+
+        /* ===== TAMAÑOS DE FUENTE ===== */
+        body.large-font {
+            font-size: 18px;
+        }
+
+        body.large-font h1 {
+            font-size: 2.75rem;
+        }
+
+        body.large-font h2 {
+            font-size: 2.25rem;
+        }
+
+        body.large-font h3 {
+            font-size: 1.75rem;
+        }
+
+        body.extra-large-font {
+            font-size: 20px;
+        }
+
+        body.extra-large-font h1 {
+            font-size: 3rem;
+        }
+
+        body.extra-large-font h2 {
+            font-size: 2.5rem;
+        }
+
+        body.extra-large-font h3 {
+            font-size: 2rem;
+        }
+
+        /* ===== LECTOR DE PANTALLA ===== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* ===== REDUCCIÓN DE MOVIMIENTO ===== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .btn::before {
+                display: none;
+            }
+        }
+
+        /* ===== FOCUS VISIBLE MEJORADO ===== */
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid var(--primary-blue);
+            outline-offset: 2px;
+        }
+
+        /* ===== SOPORTE PARA LECTOR DE PANTALLA ===== */
+        .aria-live {
+            position: absolute;
+            left: -10000px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        /* ===== ESTILOS PARA DISCAPACIDAD VISUAL ===== */
+        .visually-impaired-friendly {
+            letter-spacing: 0.5px;
+            line-height: 1.8;
+        }
+
+        .visually-impaired-friendly .form-label {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        /* ===== INDICADORES DE ESTADO PARA DISCAPACIDAD AUDITIVA ===== */
+        .visual-alert {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+        }
+
+        .visual-alert.info {
+            background: #DBEAFE;
+            color: var(--primary-blue);
+            border: 1px solid var(--primary-blue);
+        }
+
+        .visual-alert.warning {
+            background: #FEF3C7;
+            color: #D97706;
+            border: 1px solid #D97706;
+        }
+
+        .visual-alert.success {
+            background: #D1FAE5;
+            color: var(--success-green);
+            border: 1px solid var(--success-green);
+        }
+    </style>
 </head>
 <body>
-    <!-- Header se carga dinámicamente -->
-    <div id="header-container"></div>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="images/text.png" alt="Scams Call - Reporta Estafas Telefónicas" class="logo-text">
+            </div>
+            
+            <nav class="main-nav" aria-label="Navegación principal">
+                <div id="nav-content">
+                    <!-- La navegación se carga dinámicamente según el usuario -->
+                </div>
+            </nav>
+        </div>
+    </header>
 
-    <!-- Contenido principal -->
+    <!-- Barra de accesibilidad -->
+    <div class="accessibility-bar">
+        <span style="color: white; margin-right: auto; font-size: 0.875rem;">
+            ♿ Accesibilidad
+        </span>
+        <button class="accessibility-btn" onclick="app.toggleFontSize()" title="Aumentar tamaño de texto">
+            <i class="fas fa-text-height"></i> Texto
+        </button>
+        <button class="accessibility-btn" onclick="app.toggleHighContrast()" title="Alternar alto contraste">
+            <i class="fas fa-adjust"></i> Contraste
+        </button>
+        <button class="accessibility-btn" onclick="app.enableScreenReaderMode()" title="Modo lectura de pantalla">
+            <i class="fas fa-assistive-listening-systems"></i> Lectura
+        </button>
+    </div>
+
+    <!-- Área para anuncios del lector de pantalla -->
+    <div id="screen-reader-announce" class="aria-live" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Contenedor principal de la aplicación -->
     <div class="app-container">
         <main class="main-content" id="main-content">
             <!-- Las vistas se cargarán aquí dinámicamente -->
+            
+            <!-- Vista de Onboarding -->
+            <div id="onboardingView" class="view active">
+                <div class="onboarding-steps">
+                    <!-- Paso 1: Bienvenida -->
+                    <div class="step" id="step1">
+                        <div class="step-icon">🚨</div>
+                        <h1>Bienvenido a Scams Call</h1>
+                        <p>Tu plataforma confiable para reportar estafas telefónicas en Colombia</p>
+                        <p class="text-light">Ayuda a proteger a tu comunidad reportando números sospechosos</p>
+                        <button class="btn" onclick="nextOnboardingStep(2)">
+                            Comenzar <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Paso 2: Cómo funciona -->
+                    <div class="step" id="step2" style="display: none;">
+                        <div class="step-icon">📱</div>
+                        <h2>¿Cómo funciona?</h2>
+                        <div style="text-align: left; max-width: 500px; margin: 0 auto;">
+                            <p><strong>1.</strong> Reporta números desconocidos o sospechosos</p>
+                            <p><strong>2.</strong> Describe lo que sucedió en la llamada</p>
+                            <p><strong>3.</strong> Recibe seguimiento de tus reportes</p>
+                            <p><strong>4.</strong> Ayuda a prevenir estafas en tu comunidad</p>
+                        </div>
+                        <button class="btn" onclick="nextOnboardingStep(3)">
+                            Siguiente <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Paso 3: Selección de rol -->
+                    <div class="step" id="step3" style="display: none;">
+                        <div class="step-icon">👥</div>
+                        <h2>Selecciona tu perfil</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 500px; margin: 2rem auto;">
+                            <button class="btn-outline" onclick="selectRole('citizen')">
+                                <i class="fas fa-user"></i>
+                                Ciudadano
+                            </button>
+                            <button class="btn-outline" onclick="selectRole('agent')">
+                                <i class="fas fa-shield-alt"></i>
+                                Agente
+                            </button>
+                        </div>
+                        <p class="text-light">Los agentes deben tener credenciales verificadas</p>
+                    </div>
+                </div>
+
+                <div class="step-indicators">
+                    <div class="step-indicator active" id="indicator1"></div>
+                    <div class="step-indicator" id="indicator2"></div>
+                    <div class="step-indicator" id="indicator3"></div>
+                </div>
+            </div>
+
+            <!-- Vista de Login Ciudadano -->
+            <div id="citizenLoginView" class="view">
+                <div class="card" style="max-width: 400px; margin: 0 auto;">
+                    <h2 style="text-align: center;">Acceso Ciudadano</h2>
+                    <form id="citizenLoginForm">
+                        <div class="form-group">
+                            <label for="citizenEmail" class="form-label">Correo electrónico</label>
+                            <input type="email" id="citizenEmail" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="citizenPassword" class="form-label">Contraseña</label>
+                            <input type="password" id="citizenPassword" class="form-input" required>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Ingresar
+                        </button>
+                    </form>
+                    <p style="text-align: center; margin-top: 1rem;">
+                        ¿No tienes cuenta? 
+                        <a href="#" onclick="app.showView('citizenRegisterView')" style="color: var(--primary-blue);">Regístrate aquí</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Vista de Registro Ciudadano -->
+            <div id="citizenRegisterView" class="view">
+                <div class="card" style="max-width: 500px; margin: 0 auto;">
+                    <h2 style="text-align: center;">Registro Ciudadano</h2>
+                    <form id="citizenRegisterForm">
+                        <div class="form-group">
+                            <label for="regName" class="form-label">Nombre completo</label>
+                            <input type="text" id="regName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail" class="form-label">Correo electrónico</label>
+                            <input type="email" id="regEmail" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPhone" class="form-label">Teléfono (opcional)</label>
+                            <input type="tel" id="regPhone" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword" class="form-label">Contraseña</label>
+                            <input type="password" id="regPassword" class="form-input" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="regConsent" required>
+                                <label for="regConsent">Acepto la Política de Privacidad y tratamiento de datos según Ley 1581 de 2012</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <i class="fas fa-user-plus"></i>
+                            Registrarse
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Vista de Login Agente -->
+            <div id="agentLoginView" class="view">
+                <div class="card" style="max-width: 400px; margin: 0 auto;">
+                    <h2 style="text-align: center;">Acceso Agente</h2>
+                    <form id="agentLoginForm">
+                        <div class="form-group">
+                            <label for="agentInstitution" class="form-label">Institución</label>
+                            <select id="agentInstitution" class="form-select" required>
+                                <option value="">Selecciona tu institución</option>
+                                <option value="policia">Policía Nacional</option>
+                                <option value="fiscalia">Fiscalía General</option>
+                                <option value="gaula">GAULA Militar</option>
+                                <option value="ejercito">Ejército Nacional</option>
+                                <option value="otra">Otra institución</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="agentEmail" class="form-label">Correo institucional</label>
+                            <input type="email" id="agentEmail" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="agentPassword" class="form-label">Contraseña</label>
+                            <input type="password" id="agentPassword" class="form-input" required>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <i class="fas fa-shield-alt"></i>
+                            Ingresar como Agente
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Dashboard Ciudadano -->
+            <div id="citizenDashboardView" class="view">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Mi Dashboard</h1>
+                        <p>Bienvenido de nuevo, <span id="userName">Usuario</span></p>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn" onclick="app.showView('reportView')">
+                            <i class="fas fa-plus"></i>
+                            Nuevo Reporte
+                        </button>
+                        <button class="btn-outline" onclick="app.logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Salir
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalReports">0</div>
+                        <div class="stat-label">Reportes Totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingReports">0</div>
+                        <div class="stat-label">En Investigación</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="resolvedReports">0</div>
+                        <div class="stat-label">Resueltos</div>
+                    </div>
+                </div>
+
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="switchTab('myReports')">Mis Reportes</button>
+                    <button class="nav-tab" onclick="switchTab('alerts')">Alertas Recientes</button>
+                    <button class="nav-tab" onclick="switchTab('help')">Ayuda</button>
+                </div>
+
+                <div id="myReportsTab" class="tab-content active">
+                    <h3>Mis Reportes Recientes</h3>
+                    <div class="reports-list" id="citizenReportsList">
+                        <!-- Los reportes se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+
+                <div id="alertsTab" class="tab-content">
+                    <h3>Alertas de la Comunidad</h3>
+                    <div class="card">
+                        <p>Aquí verás las últimas estafas reportadas en tu zona para que estés alerta.</p>
+                        <!-- Las alertas se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+
+                <div id="helpTab" class="tab-content">
+                    <h3>Centro de Ayuda</h3>
+                    <div class="card">
+                        <h4>¿Cómo identificar una estafa telefónica?</h4>
+                        <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Te piden información personal o bancaria</li>
+                            <li>Ofrecen premios o beneficios inesperados</li>
+                            <li>Suplantan identidad de entidades oficiales</li>
+                            <li>Presionan para tomar decisiones rápidas</li>
+                        </ul>
+                        <h4>¿Qué hacer si recibes una llamada sospechosa?</h4>
+                        <ul style="margin-left: 1.5rem;">
+                            <li>No proporciones información personal</li>
+                            <li>Cuelga y reporta el número inmediatamente</li>
+                            <li>Verifica la información con la entidad oficial</li>
+                            <li>Comunica a tus familiares y amigos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Agente -->
+            <div id="agentDashboardView" class="view">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Dashboard de Agente</h1>
+                        <p>Institución: <span id="agentInstitutionName">Policía Nacional</span></p>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn-outline" onclick="app.logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Salir
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="agentTotalReports">0</div>
+                        <div class="stat-label">Reportes Totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="agentNewReports">0</div>
+                        <div class="stat-label">Nuevos Reportes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="agentUrgentReports">0</div>
+                        <div class="stat-label">Casos Urgentes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="agentResolved">0</div>
+                        <div class="stat-label">Resueltos Hoy</div>
+                    </div>
+                </div>
+
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="switchAgentTab('allReports')">Todos los Reportes</button>
+                    <button class="nav-tab" onclick="switchAgentTab('myCases')">Mis Casos</button>
+                    <button class="nav-tab" onclick="switchAgentTab('analytics')">Analíticas</button>
+                </div>
+
+                <div id="allReportsTab" class="tab-content active">
+                    <h3>Reportes Recientes</h3>
+                    <div class="reports-list" id="agentReportsList">
+                        <!-- Los reportes se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+
+                <div id="myCasesTab" class="tab-content">
+                    <h3>Casos Asignados</h3>
+                    <div class="card">
+                        <p>Aquí verás los casos que tienes asignados para investigación.</p>
+                        <!-- Los casos asignados se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+
+                <div id="analyticsTab" class="tab-content">
+                    <h3>Analíticas de Estafas</h3>
+                    <div class="card">
+                        <p>Estadísticas y patrones detectados en los reportes de estafas.</p>
+                        <!-- Las analíticas se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista de Reporte -->
+            <div id="reportView" class="view">
+                <div class="card">
+                    <h2>Reportar Estafa Telefónica</h2>
+                    <p>Tu reporte ayuda a proteger a la comunidad. Toda la información es confidencial.</p>
+
+                    <form id="reportForm">
+                        <div class="form-group">
+                            <label for="reportPhone" class="form-label">Número telefónico</label>
+                            <input type="text" id="reportPhone" class="form-input" 
+                                   placeholder="Ej: 3001234567, +573001234567, o 'Desconocido'">
+                            <div class="error-message" id="phoneError">Por favor ingresa un número válido o "Desconocido"</div>
+                            <small style="color: var(--text-light); margin-top: 0.5rem; display: block;">
+                                Si no conoces el número, escribe "Desconocido" o "Privado". Aceptamos todos los formatos: 3001234567, +57 300 123 4567, etc.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="scamType" class="form-label">Tipo de estafa *</label>
+                            <select id="scamType" class="form-select" required>
+                                <option value="">Selecciona el tipo de estafa</option>
+                                <option value="financial">💰 Estafa financiera (créditos, inversiones)</option>
+                                <option value="threat">⚠️ Amenazas o extorsión</option>
+                                <option value="identity">🆔 Suplantación de identidad</option>
+                                <option value="service">📞 Fraude de servicios</option>
+                                <option value="prize">🎁 Estafa de premios o loterías</option>
+                                <option value="tech">💻 Soporte técnico falso</option>
+                                <option value="romance">❤️ Estafa romántica</option>
+                                <option value="other">❓ Otro tipo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="form-label">Descripción de lo sucedido *</label>
+                            <textarea id="description" class="form-textarea" 
+                                      placeholder="Describe con detalle lo que te dijeron, cómo fue la estafa, qué información te pidieron..."
+                                      required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="callDate" class="form-label">Fecha y hora de la llamada</label>
+                            <input type="datetime-local" id="callDate" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location" class="form-label">Ubicación (opcional)</label>
+                            <input type="text" id="location" class="form-input" placeholder="Ciudad o municipio donde recibiste la llamada">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="anonymous" name="anonymous">
+                                <label for="anonymous">Reportar de forma anónima</label>
+                            </div>
+                        </div>
+
+                        <div class="success-message" id="reportSuccess">
+                            ✅ Reporte enviado exitosamente. ¡Gracias por contribuir a la seguridad colectiva!
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-paper-plane"></i>
+                                Enviar Reporte
+                            </button>
+                            <button type="button" class="btn-outline" onclick="app.showView('citizenDashboardView')">
+                                <i class="fas fa-arrow-left"></i>
+                                Volver al Dashboard
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </main>
     </div>
 
-    <!-- Footer se carga dinámicamente -->
-    <div id="footer-container"></div>
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#" class="footer-link" onclick="app.showView('helpView')">Centro de Ayuda</a>
+                <a href="#" class="footer-link" onclick="app.showPrivacyPolicy()">Política de Privacidad</a>
+                <a href="#" class="footer-link" onclick="app.showTerms()">Términos de Servicio</a>
+                <a href="#" class="footer-link" onclick="app.showAccessibilityInfo()">Accesibilidad</a>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+                <img src="images/logo.png" alt="Scams Call" style="height: 30px; margin-bottom: 0.5rem;">
+            </div>
+            
+            <p style="color: var(--text-light); font-size: 0.875rem;">
+                &copy; 2025 Scams Call App.
+            </p>
+            <p style="color: var(--text-light); font-size: 0.875rem;">
+                &copy; Plataforma para reportar estafas telefónicas.
+            </p>
+            <p style="color: var(--text-light); font-size: 0.875rem; margin-top: 0.5rem;">
+                Protege a tu comunidad. Todos los derechos reservados.
+            </p>
+            <p style="color: var(--text-light); font-size: 0.875rem;">
+                &copy; Plataforma para Hackabox de la fundación Sandbox Bogotá, Colombia.
+            </p>
+        </div>
+    </footer>
 
-    <!-- Nuestros scripts -->
-    <script src="js/utils.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/dashboard.js"></script>
-    <script src="js/reports.js"></script>
-    
-    <!-- Inicialización -->
     <script>
+        // === CÓDIGO JAVASCRIPT CONSOLIDADO ===
+
+        // utils.js - Funciones utilitarias reutilizables
+        const utils = {
+            // Formatear números telefónicos colombianos
+            formatPhoneNumber: function(phone) {
+                if (!phone) return '';
+                
+                const cleanPhone = phone.replace(/\D/g, '');
+                
+                if (cleanPhone.startsWith('57') && cleanPhone.length === 12) {
+                    return `+${cleanPhone}`;
+                } else if (cleanPhone.length === 10) {
+                    return `+57${cleanPhone}`;
+                } else if (cleanPhone.length === 12 && !cleanPhone.startsWith('57')) {
+                    return `+57${cleanPhone.slice(2)}`;
+                }
+                
+                return phone;
+            },
+
+            // Validar número telefónico colombiano
+            isValidColombianPhone: function(phone) {
+                if (!phone) return false;
+                
+                // Aceptar "Desconocido", "Privado", etc.
+                if (typeof phone === 'string' && 
+                    (phone.toLowerCase().includes('desconocido') || 
+                     phone.toLowerCase().includes('privado') ||
+                     phone.toLowerCase().includes('oculto'))) {
+                    return true;
+                }
+                
+                const cleanPhone = phone.replace(/\D/g, '');
+                
+                // Validar formatos comunes en Colombia
+                return /^(57)?[1-9][0-9]{8}$/.test(cleanPhone) || 
+                       /^[1-9][0-9]{9}$/.test(cleanPhone);
+            },
+
+            // Mostrar notificaciones accesibles
+            showNotification: function(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `visual-alert ${type}`;
+                notification.setAttribute('role', 'alert');
+                notification.setAttribute('aria-live', 'assertive');
+                notification.innerHTML = `
+                    <i class="fas fa-${this.getNotificationIcon(type)}"></i>
+                    ${message}
+                `;
+                
+                // Posicionar la notificación
+                notification.style.position = 'fixed';
+                notification.style.top = '100px';
+                notification.style.right = '20px';
+                notification.style.zIndex = '1000';
+                notification.style.maxWidth = '400px';
+                
+                document.body.appendChild(notification);
+                
+                // Remover después de 5 segundos
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 5000);
+            },
+
+            getNotificationIcon: function(type) {
+                const icons = {
+                    'info': 'info-circle',
+                    'success': 'check-circle',
+                    'warning': 'exclamation-triangle',
+                    'error': 'times-circle'
+                };
+                return icons[type] || 'info-circle';
+            },
+
+            // Guardar en localStorage con manejo de errores
+            saveToStorage: function(key, data) {
+                try {
+                    localStorage.setItem(key, JSON.stringify(data));
+                    return true;
+                } catch (error) {
+                    console.error('Error guardando en localStorage:', error);
+                    return false;
+                }
+            },
+
+            // Leer de localStorage con manejo de errores
+            getFromStorage: function(key) {
+                try {
+                    const data = localStorage.getItem(key);
+                    return data ? JSON.parse(data) : null;
+                } catch (error) {
+                    console.error('Error leyendo de localStorage:', error);
+                    return null;
+                }
+            },
+
+            // Generar ID único
+            generateId: function() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2);
+            },
+
+            // Formatear fecha
+            formatDate: function(dateString) {
+                const options = { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                };
+                return new Date(dateString).toLocaleDateString('es-CO', options);
+            }
+        };
+
+        // app.js - Lógica principal de la aplicación
+        const app = {
+            currentUser: null,
+            currentView: 'onboardingView',
+            accessibility: {
+                highContrast: false,
+                fontSize: 'normal',
+                screenReader: false
+            },
+
+            // Inicializar la aplicación
+            init: function() {
+                this.setupEventListeners();
+                this.loadUserData();
+                this.showView('onboardingView');
+                this.announceToScreenReader('Aplicación Scams Call cargada correctamente');
+            },
+
+            // Configurar event listeners
+            setupEventListeners: function() {
+                // Configurar formularios de autenticación
+                const citizenLoginForm = document.getElementById('citizenLoginForm');
+                if (citizenLoginForm) {
+                    citizenLoginForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.handleCitizenLogin();
+                    });
+                }
+
+                const citizenRegisterForm = document.getElementById('citizenRegisterForm');
+                if (citizenRegisterForm) {
+                    citizenRegisterForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.handleCitizenRegister();
+                    });
+                }
+
+                const agentLoginForm = document.getElementById('agentLoginForm');
+                if (agentLoginForm) {
+                    agentLoginForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.handleAgentLogin();
+                    });
+                }
+
+                // Configurar formulario de reportes
+                const reportForm = document.getElementById('reportForm');
+                if (reportForm) {
+                    reportForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.handleReportSubmit();
+                    });
+                }
+
+                // Configurar validación en tiempo real para el número de teléfono
+                const phoneInput = document.getElementById('reportPhone');
+                if (phoneInput) {
+                    phoneInput.addEventListener('input', this.validatePhoneInput);
+                }
+            },
+
+            // Validar entrada de teléfono
+            validatePhoneInput: function(e) {
+                const phone = e.target.value;
+                const errorElement = document.getElementById('phoneError');
+
+                // Si el campo está vacío, quitar error
+                if (!phone.trim()) {
+                    errorElement.classList.remove('show');
+                    return;
+                }
+
+                // Si el usuario escribe "desconocido", "privado", etc., es válido
+                if (phone.toLowerCase().includes('desconocido') || 
+                    phone.toLowerCase().includes('privado') ||
+                    phone.toLowerCase().includes('oculto')) {
+                    errorElement.classList.remove('show');
+                    return;
+                }
+
+                // Validar formato de teléfono
+                if (utils.isValidColombianPhone(phone)) {
+                    errorElement.classList.remove('show');
+                } else {
+                    errorElement.classList.add('show');
+                }
+            },
+
+            // Cargar datos del usuario
+            loadUserData: function() {
+                this.currentUser = utils.getFromStorage('currentUser');
+                const savedAccessibility = utils.getFromStorage('accessibilitySettings');
+                
+                if (savedAccessibility) {
+                    this.accessibility = { ...this.accessibility, ...savedAccessibility };
+                    this.applyAccessibilitySettings();
+                }
+            },
+
+            // Mostrar vista específica
+            showView: function(viewId) {
+                // Ocultar todas las vistas
+                document.querySelectorAll('.view').forEach(view => {
+                    view.classList.remove('active');
+                });
+                
+                // Mostrar la vista solicitada
+                const targetView = document.getElementById(viewId);
+                if (targetView) {
+                    targetView.classList.add('active');
+                    this.currentView = viewId;
+                    
+                    // Actualizar navegación
+                    this.updateNavigation();
+                    
+                    // Anunciar cambio de vista para lectores de pantalla
+                    this.announceViewChange(viewId);
+                    
+                    // Actualizar dashboards si es necesario
+                    if (viewId === 'citizenDashboardView') {
+                        this.updateCitizenDashboard();
+                    } else if (viewId === 'agentDashboardView') {
+                        this.updateAgentDashboard();
+                    }
+                }
+            },
+
+            // Anunciar cambio de vista para accesibilidad
+            announceViewChange: function(viewId) {
+                const viewNames = {
+                    'onboardingView': 'Pantalla de bienvenida',
+                    'citizenLoginView': 'Inicio de sesión para ciudadanos',
+                    'agentLoginView': 'Inicio de sesión para agentes',
+                    'citizenDashboardView': 'Panel de control ciudadano',
+                    'agentDashboardView': 'Panel de control de agente',
+                    'reportView': 'Formulario de reporte'
+                };
+                
+                this.announceToScreenReader(`Nueva vista: ${viewNames[viewId] || viewId}`);
+            },
+
+            // Actualizar navegación según el usuario
+            updateNavigation: function() {
+                const navContent = document.getElementById('nav-content');
+                if (!navContent) return;
+
+                let navHTML = '';
+                
+                if (this.currentUser) {
+                    if (this.currentUser.role === 'citizen') {
+                        navHTML = `
+                            <span style="color: var(--text-secondary); margin-right: 1rem;">
+                                Hola, ${this.currentUser.name}
+                            </span>
+                            <button class="btn-outline" onclick="app.showView('reportView')">
+                                <i class="fas fa-plus"></i> Nuevo Reporte
+                            </button>
+                            <button class="btn-outline" onclick="app.logout()" style="margin-left: 0.5rem;">
+                                <i class="fas fa-sign-out-alt"></i> Salir
+                            </button>
+                        `;
+                    } else if (this.currentUser.role === 'agent') {
+                        navHTML = `
+                            <span style="color: var(--text-secondary); margin-right: 1rem;">
+                                Agente: ${this.currentUser.institution}
+                            </span>
+                            <button class="btn-outline" onclick="app.logout()">
+                                <i class="fas fa-sign-out-alt"></i> Salir
+                            </button>
+                        `;
+                    }
+                } else {
+                    navHTML = `
+                        <button class="btn-outline" onclick="app.showView('citizenLoginView')">
+                            <i class="fas fa-user"></i> Ciudadano
+                        </button>
+                        <button class="btn-outline" onclick="app.showView('agentLoginView')" style="margin-left: 0.5rem;">
+                            <i class="fas fa-shield-alt"></i> Agente
+                        </button>
+                    `;
+                }
+                
+                navContent.innerHTML = navHTML;
+            },
+
+            // Funciones de accesibilidad
+            toggleHighContrast: function() {
+                this.accessibility.highContrast = !this.accessibility.highContrast;
+                document.body.classList.toggle('high-contrast', this.accessibility.highContrast);
+                utils.saveToStorage('accessibilitySettings', this.accessibility);
+                
+                const message = this.accessibility.highContrast ? 
+                    'Modo alto contraste activado' : 'Modo alto contraste desactivado';
+                utils.showNotification(message, 'info');
+                this.announceToScreenReader(message);
+            },
+
+            toggleFontSize: function() {
+                const sizes = ['normal', 'large', 'extra-large'];
+                const currentIndex = sizes.indexOf(this.accessibility.fontSize);
+                const nextIndex = (currentIndex + 1) % sizes.length;
+                
+                this.accessibility.fontSize = sizes[nextIndex];
+                
+                // Remover clases anteriores
+                document.body.classList.remove('large-font', 'extra-large-font');
+                
+                // Aplicar nueva clase
+                if (this.accessibility.fontSize !== 'normal') {
+                    document.body.classList.add(this.accessibility.fontSize + '-font');
+                }
+                
+                utils.saveToStorage('accessibilitySettings', this.accessibility);
+                
+                const messages = {
+                    'normal': 'Tamaño de texto normal',
+                    'large': 'Tamaño de texto grande',
+                    'extra-large': 'Tamaño de texto extra grande'
+                };
+                
+                utils.showNotification(`Texto: ${messages[this.accessibility.fontSize]}`, 'info');
+                this.announceToScreenReader(messages[this.accessibility.fontSize]);
+            },
+
+            enableScreenReaderMode: function() {
+                this.accessibility.screenReader = !this.accessibility.screenReader;
+                document.body.classList.toggle('visually-impaired-friendly', this.accessibility.screenReader);
+                utils.saveToStorage('accessibilitySettings', this.accessibility);
+                
+                const message = this.accessibility.screenReader ? 
+                    'Modo de accesibilidad para lectores de pantalla activado' :
+                    'Modo de accesibilidad para lectores de pantalla desactivado';
+                
+                utils.showNotification(message, 'info');
+                this.announceToScreenReader(message);
+            },
+
+            applyAccessibilitySettings: function() {
+                if (this.accessibility.highContrast) {
+                    document.body.classList.add('high-contrast');
+                }
+                
+                if (this.accessibility.fontSize !== 'normal') {
+                    document.body.classList.add(this.accessibility.fontSize + '-font');
+                }
+                
+                if (this.accessibility.screenReader) {
+                    document.body.classList.add('visually-impaired-friendly');
+                }
+            },
+
+            // Anunciar para lectores de pantalla
+            announceToScreenReader: function(message) {
+                const announcer = document.getElementById('screen-reader-announce');
+                if (announcer) {
+                    announcer.textContent = message;
+                    
+                    // Limpiar después de un tiempo para anuncios futuros
+                    setTimeout(() => {
+                        announcer.textContent = '';
+                    }, 1000);
+                }
+            },
+
+            // Manejar login de ciudadano
+            handleCitizenLogin: function() {
+                const email = document.getElementById('citizenEmail').value;
+                const password = document.getElementById('citizenPassword').value;
+
+                // Simulación de autenticación - en una app real, esto sería una llamada a una API
+                const users = utils.getFromStorage('scamUsers') || [];
+                const user = users.find(u => u.email === email && u.password === password);
+
+                if (user) {
+                    this.currentUser = user;
+                    utils.saveToStorage('currentUser', user);
+                    this.updateNavigation();
+                    this.showView('citizenDashboardView');
+                    utils.showNotification('¡Bienvenido de nuevo!', 'success');
+                    this.announceToScreenReader(`Bienvenido ${user.name}. Has ingresado al panel de control ciudadano.`);
+                } else {
+                    // Crear usuario demo si no existe (para propósitos de demostración)
+                    const newUser = {
+                        id: utils.generateId(),
+                        name: 'Usuario Demo',
+                        email: email,
+                        password: password, // En una app real, esto debería estar encriptado
+                        role: 'citizen',
+                        createdAt: new Date().toISOString()
+                    };
+                    users.push(newUser);
+                    utils.saveToStorage('scamUsers', users);
+                    
+                    this.currentUser = newUser;
+                    utils.saveToStorage('currentUser', newUser);
+                    this.updateNavigation();
+                    this.showView('citizenDashboardView');
+                    utils.showNotification('¡Cuenta creada y sesión iniciada!', 'success');
+                    this.announceToScreenReader('Cuenta de demostración creada. Has ingresado al panel de control ciudadano.');
+                }
+            },
+
+            // Manejar registro de ciudadano
+            handleCitizenRegister: function() {
+                const name = document.getElementById('regName').value;
+                const email = document.getElementById('regEmail').value;
+                const password = document.getElementById('regPassword').value;
+
+                const users = utils.getFromStorage('scamUsers') || [];
+                
+                // Verificar si el usuario ya existe
+                if (users.find(u => u.email === email)) {
+                    utils.showNotification('Este correo electrónico ya está registrado.', 'error');
+                    this.announceToScreenReader('Error: Este correo electrónico ya está registrado.');
+                    return;
+                }
+
+                // Crear nuevo usuario
+                const newUser = {
+                    id: utils.generateId(),
+                    name: name,
+                    email: email,
+                    password: password, // En una app real, esto debería estar encriptado
+                    role: 'citizen',
+                    createdAt: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                utils.saveToStorage('scamUsers', users);
+                
+                this.currentUser = newUser;
+                utils.saveToStorage('currentUser', newUser);
+                this.updateNavigation();
+                this.showView('citizenDashboardView');
+                utils.showNotification('¡Cuenta creada exitosamente!', 'success');
+                this.announceToScreenReader(`Cuenta creada para ${name}. Has ingresado al panel de control ciudadano.`);
+            },
+
+            // Manejar login de agente
+            handleAgentLogin: function() {
+                const institution = document.getElementById('agentInstitution').value;
+                const email = document.getElementById('agentEmail').value;
+                const password = document.getElementById('agentPassword').value;
+
+                // Simulación de autenticación de agente
+                // En una app real, esto verificaría con un backend y credenciales oficiales
+
+                // Validar que el correo tenga dominio institucional (simulación)
+                const institutionalDomains = ['policia.gov.co', 'fiscalia.gov.co', 'ejercito.mil.co', 'gaula.gov.co'];
+                const emailDomain = email.split('@')[1];
+                
+                if (!institutionalDomains.includes(emailDomain)) {
+                    utils.showNotification('Debes usar un correo institucional válido.', 'error');
+                    this.announceToScreenReader('Error: Debes usar un correo institucional válido.');
+                    return;
+                }
+
+                // Crear usuario agente (en una app real, esto vendría de una base de datos)
+                const agentUser = {
+                    id: utils.generateId(),
+                    name: 'Agente ' + institution,
+                    email: email,
+                    role: 'agent',
+                    institution: institution,
+                    createdAt: new Date().toISOString()
+                };
+
+                this.currentUser = agentUser;
+                utils.saveToStorage('currentUser', agentUser);
+                this.updateNavigation();
+                this.showView('agentDashboardView');
+                utils.showNotification('¡Acceso de agente concedido!', 'success');
+                this.announceToScreenReader(`Has ingresado como agente de ${institution}. Panel de control de agente.`);
+            },
+
+            // Manejar envío de reporte
+            handleReportSubmit: function() {
+                const phone = document.getElementById('reportPhone').value;
+                const scamType = document.getElementById('scamType').value;
+                const description = document.getElementById('description').value;
+                const callDate = document.getElementById('callDate').value;
+                const location = document.getElementById('location').value;
+                const anonymous = document.getElementById('anonymous').checked;
+
+                // Validar campos obligatorios
+                if (!phone.trim() || !scamType || !description.trim()) {
+                    utils.showNotification('Por favor completa todos los campos obligatorios.', 'error');
+                    this.announceToScreenReader('Error: Por favor completa todos los campos obligatorios.');
+                    return;
+                }
+
+                // Validar número de teléfono (si no es "desconocido", etc.)
+                if (!phone.toLowerCase().includes('desconocido') && 
+                    !phone.toLowerCase().includes('privado') &&
+                    !phone.toLowerCase().includes('oculto') &&
+                    !utils.isValidColombianPhone(phone)) {
+                    utils.showNotification('Por favor ingresa un número de teléfono válido o escribe "Desconocido".', 'error');
+                    this.announceToScreenReader('Error: Número de teléfono inválido.');
+                    return;
+                }
+
+                // Crear nuevo reporte
+                const newReport = {
+                    id: utils.generateId(),
+                    phone: phone,
+                    scamType: scamType,
+                    description: description,
+                    callDate: callDate || new Date().toISOString(),
+                    location: location,
+                    anonymous: anonymous,
+                    status: 'pending',
+                    citizen: anonymous ? 'Anónimo' : this.currentUser.name,
+                    citizenEmail: anonymous ? 'anonymous@scamscall.co' : this.currentUser.email,
+                    createdAt: new Date().toISOString(),
+                    assignedTo: null
+                };
+
+                // Guardar reporte
+                const existingReports = utils.getFromStorage('scamReports') || [];
+                existingReports.push(newReport);
+                utils.saveToStorage('scamReports', existingReports);
+
+                // Mostrar mensaje de éxito
+                utils.showNotification('Reporte enviado exitosamente. ¡Gracias por contribuir a la seguridad colectiva!', 'success');
+                this.announceToScreenReader('Reporte enviado exitosamente. Gracias por contribuir a la seguridad colectiva.');
+
+                // Resetear formulario
+                document.getElementById('reportForm').reset();
+
+                // Redirigir al dashboard después de un breve delay
+                setTimeout(() => {
+                    this.showView('citizenDashboardView');
+                }, 2000);
+            },
+
+            // Actualizar dashboard del ciudadano
+            updateCitizenDashboard: function() {
+                if (!this.currentUser) return;
+
+                const reports = utils.getFromStorage('scamReports') || [];
+                const userReports = reports.filter(report => report.citizenEmail === this.currentUser.email);
+                const pendingReports = userReports.filter(report => report.status === 'pending');
+                const resolvedReports = userReports.filter(report => report.status === 'resolved');
+
+                // Actualizar estadísticas
+                document.getElementById('totalReports').textContent = userReports.length;
+                document.getElementById('pendingReports').textContent = pendingReports.length;
+                document.getElementById('resolvedReports').textContent = resolvedReports.length;
+
+                // Actualizar lista de reportes
+                this.updateCitizenReportsList(userReports);
+            },
+
+            // Actualizar lista de reportes del ciudadano
+            updateCitizenReportsList: function(userReports) {
+                const reportsList = document.getElementById('citizenReportsList');
+                if (!reportsList) return;
+
+                if (userReports.length === 0) {
+                    reportsList.innerHTML = `
+                        <div class="card">
+                            <p style="text-align: center; color: var(--text-light);">
+                                Aún no has realizado reportes.<br>
+                                <button class="btn" onclick="app.showView('reportView')" style="margin-top: 1rem;">
+                                    <i class="fas fa-plus"></i> Haz tu primer reporte
+                                </button>
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                reportsList.innerHTML = userReports.slice(0, 5).map(report => `
+                    <div class="report-item">
+                        <div class="report-header">
+                            <div>
+                                <h4>Reporte #${report.id.slice(-6)}</h4>
+                                <p>Número: ${report.phone}</p>
+                            </div>
+                            <span class="report-status status-${report.status}">
+                                ${this.getStatusText(report.status)}
+                            </span>
+                        </div>
+                        <p><strong>Tipo:</strong> ${this.getScamTypeText(report.scamType)}</p>
+                        <p>${report.description.substring(0, 100)}${report.description.length > 100 ? '...' : ''}</p>
+                        <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.5rem;">
+                            Reportado el ${utils.formatDate(report.createdAt)}
+                        </p>
+                    </div>
+                `).join('');
+            },
+
+            // Actualizar dashboard del agente
+            updateAgentDashboard: function() {
+                const reports = utils.getFromStorage('scamReports') || [];
+                const today = new Date().toDateString();
+                const newReports = reports.filter(report => new Date(report.createdAt).toDateString() === today);
+                const urgentReports = reports.filter(report => report.scamType === 'threat' && report.status === 'pending');
+                const resolvedReports = reports.filter(report => report.status === 'resolved');
+
+                // Actualizar estadísticas
+                document.getElementById('agentTotalReports').textContent = reports.length;
+                document.getElementById('agentNewReports').textContent = newReports.length;
+                document.getElementById('agentUrgentReports').textContent = urgentReports.length;
+                document.getElementById('agentResolved').textContent = resolvedReports.length;
+
+                // Actualizar lista de reportes
+                this.updateAgentReportsList(reports);
+            },
+
+            // Actualizar lista de reportes del agente
+            updateAgentReportsList: function(reports) {
+                const reportsList = document.getElementById('agentReportsList');
+                if (!reportsList) return;
+
+                if (reports.length === 0) {
+                    reportsList.innerHTML = `
+                        <div class="card">
+                            <p style="text-align: center; color: var(--text-light);">
+                                No hay reportes pendientes.
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                reportsList.innerHTML = reports.slice(0, 10).map(report => `
+                    <div class="report-item">
+                        <div class="report-header">
+                            <div>
+                                <h4>Reporte #${report.id.slice(-6)}</h4>
+                                <p>Número: ${report.phone} | ${report.anonymous ? 'Anónimo' : report.citizen}</p>
+                            </div>
+                            <span class="report-status status-${report.status}">
+                                ${this.getStatusText(report.status)}
+                            </span>
+                        </div>
+                        <p><strong>Tipo:</strong> ${this.getScamTypeText(report.scamType)}</p>
+                        <p>${report.description.substring(0, 150)}${report.description.length > 150 ? '...' : ''}</p>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="app.viewReportDetails('${report.id}')">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </button>
+                            <button class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="app.assignToMe('${report.id}')">
+                                <i class="fas fa-edit"></i> Asignar
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            // Obtener texto del tipo de estafa
+            getScamTypeText: function(type) {
+                const types = {
+                    'financial': 'Estafa financiera',
+                    'threat': 'Amenazas o extorsión',
+                    'identity': 'Suplantación de identidad',
+                    'service': 'Fraude de servicios',
+                    'prize': 'Estafa de premios',
+                    'tech': 'Soporte técnico falso',
+                    'romance': 'Estafa romántica',
+                    'other': 'Otro tipo'
+                };
+                return types[type] || 'Desconocido';
+            },
+
+            // Obtener texto del estado
+            getStatusText: function(status) {
+                const statuses = {
+                    'pending': 'Pendiente',
+                    'investigating': 'En Investigación',
+                    'resolved': 'Resuelto'
+                };
+                return statuses[status] || 'Desconocido';
+            },
+
+            // Cerrar sesión
+            logout: function() {
+                this.currentUser = null;
+                utils.saveToStorage('currentUser', null);
+                this.updateNavigation();
+                this.showView('onboardingView');
+                utils.showNotification('Sesión cerrada correctamente', 'info');
+                this.announceToScreenReader('Sesión cerrada. Volviendo a la pantalla de inicio.');
+            },
+
+            // Funciones de ayuda
+            showPrivacyPolicy: function() {
+                alert('Política de Privacidad: Tus datos están protegidos según la Ley 1581 de 2012 de protección de datos en Colombia.');
+            },
+
+            showTerms: function() {
+                alert('Términos de Servicio: Al usar esta plataforma aceptas reportar información veraz y respetar las normas de la comunidad.');
+            },
+
+            showAccessibilityInfo: function() {
+                alert('Scams Call está comprometido con la accesibilidad. Hemos implementado características para usuarios con discapacidades visuales y auditivas.');
+            }
+        };
+
+        // Funciones globales para el onboarding
+        function nextOnboardingStep(stepNumber) {
+            document.querySelectorAll('.onboarding-steps .step').forEach(step => {
+                step.style.display = 'none';
+            });
+            document.getElementById(`step${stepNumber}`).style.display = 'block';
+            
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                indicator.classList.toggle('active', index + 1 === stepNumber);
+            });
+        }
+
+        function selectRole(role) {
+            if (role === 'citizen') {
+                app.showView('citizenLoginView');
+            } else if (role === 'agent') {
+                app.showView('agentLoginView');
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`${tabName}Tab`).style.display = 'block';
+        }
+
+        function switchAgentTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`${tabName}Tab`).style.display = 'block';
+        }
+
+        // Inicializar la aplicación cuando el DOM esté listo
         document.addEventListener('DOMContentLoaded', function() {
             app.init();
         });
