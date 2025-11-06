@@ -1,8 +1,9 @@
 import './globals.css'
+import type { Metadata } from 'next'
 
-export const metadata = {
-  title: 'Scams Call Colombia',
-  description: 'Reporta estafas telefónicas en Colombia',
+export const metadata: Metadata = {
+  title: 'Scams Call App - Reporta Estafas Telefónicas',
+  description: 'Plataforma para reportar estafas telefónicas en Colombia',
 }
 
 export default function RootLayout({
@@ -12,7 +13,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <head>
+        <link rel="manifest" href="/ScamsCallApp/manifest.json" />
+      </head>
+      <body className="bg-gray-50 min-h-screen">
+        {children}
+      </body>
     </html>
   )
 }
